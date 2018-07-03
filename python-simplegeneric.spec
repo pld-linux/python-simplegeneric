@@ -9,7 +9,7 @@ Summary:	Simple generic functions
 Summary(pl.UTF-8):	Proste funkcje globalne
 Name:		python-%{module}
 Version:	0.8.1
-Release:	1
+Release:	2
 License:	ZPL 2.1
 Group:		Libraries/Python
 Source0:	https://pypi.python.org/packages/3d/57/4d9c9e3ae9a255cd4e1106bb57e24056d3d0709fc01b2e3e345898e49d5b/simplegeneric-%{version}.zip

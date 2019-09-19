@@ -1,51 +1,57 @@
+#
 # Conditional build:
-%bcond_with	doc	# don't build doc
-%bcond_without	tests	# do not perform "make test"
+%bcond_without	tests	# unit tests
 %bcond_without	python2 # CPython 2.x module
 %bcond_without	python3 # CPython 3.x module
 
 %define 	module	simplegeneric
 Summary:	Simple generic functions
-Summary(pl.UTF-8):	Proste funkcje globalne
+Summary(pl.UTF-8):	Proste funkcje generyczne
 Name:		python-%{module}
 Version:	0.8.1
-Release:	2
-License:	ZPL 2.1
+Release:	3
+License:	ZPL v2.1
 Group:		Libraries/Python
-Source0:	https://pypi.python.org/packages/3d/57/4d9c9e3ae9a255cd4e1106bb57e24056d3d0709fc01b2e3e345898e49d5b/simplegeneric-%{version}.zip
+#Source0Download: https://pypi.org/simple/simplegeneric/
+Source0:	https://files.pythonhosted.org/packages/source/s/simplegeneric/simplegeneric-%{version}.zip
 # Source0-md5:	f9c1fab00fd981be588fc32759f474e3
-URL:		https://pypi.python.org/pypi/simplegeneric
+URL:		https://pypi.org/project/simplegeneric/
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with python2}
-BuildRequires:	pydoc
-BuildRequires:	python-modules
+BuildRequires:	python-modules >= 1:2.5
 BuildRequires:	python-setuptools
 %endif
 %if %{with python3}
-BuildRequires:	pydoc3
-BuildRequires:	python3-modules
+BuildRequires:	python3-modules >= 1:3.2
 BuildRequires:	python3-setuptools
 %endif
-Requires:	python-modules
+Requires:	python-modules >= 1:2.5
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 The simplegeneric module lets you define simple single-dispatch
-generic functions, akin to Python’s built-in generic functions like
+generic functions, akin to Python's built-in generic functions like
 len(), iter() and so on. However, instead of using specially-named
 methods, these generic functions use simple lookup tables, akin to
 those used by e.g. pickle.dump() and other generic functions found in
 the Python standard library.
 
-# %%description -l pl.UTF-8
+%description -l pl.UTF-8
+Moduł simplegeneric pozwala definiować proste funkcje generyczne
+pojedynczego wyboru, podobne do wbudowanych funkcji generycznych
+Pythona, takich jak len(), iter() itp. Jednak, zamiast używania
+specjalnie nazwanych metod, te funkcje generyczne używają
+pojedynczych tabel wyszukiwania, podobnie do tych używanych przez np.
+pickle.dump() czy inne funkcje generyczne w bibliotece standardowej
+Pythona.
 
 %package -n python3-%{module}
-Summary:	-
-Summary(pl.UTF-8):	-
+Summary:	Simple generic functions
+Summary(pl.UTF-8):	Proste funkcje generyczne
 Group:		Libraries/Python
-Requires:	python3-modules
+Requires:	python3-modules >= 1:3.2
 
 %description -n python3-%{module}
 The simplegeneric module lets you define simple single-dispatch
@@ -55,18 +61,14 @@ methods, these generic functions use simple lookup tables, akin to
 those used by e.g. pickle.dump() and other generic functions found in
 the Python standard library.
 
-# %%description -n python3-%{module} -l pl.UTF-8
-
-%package apidocs
-Summary:	%{module} API documentation
-Summary(pl.UTF-8):	Dokumentacja API %{module}
-Group:		Documentation
-
-%description apidocs
-API documentation for %{module}.
-
-%description apidocs -l pl.UTF-8
-Dokumentacja API %{module}.
+%description -n python3-%{module} -l pl.UTF-8
+Moduł simplegeneric pozwala definiować proste funkcje generyczne
+pojedynczego wyboru, podobne do wbudowanych funkcji generycznych
+Pythona, takich jak len(), iter() itp. Jednak, zamiast używania
+specjalnie nazwanych metod, te funkcje generyczne używają
+pojedynczych tabel wyszukiwania, podobnie do tych używanych przez np.
+pickle.dump() czy inne funkcje generyczne w bibliotece standardowej
+Pythona.
 
 %prep
 %setup -q -n %{module}-%{version}
@@ -80,20 +82,11 @@ Dokumentacja API %{module}.
 %py3_build %{?with_tests:test}
 %endif
 
-%if %{with doc}
-cd docs
-%{__make} -j1 html
-rm -rf _build/html/_sources
-%endif
-
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %if %{with python2}
 %py_install
-
-%py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
-%py_comp $RPM_BUILD_ROOT%{py_sitedir}
 
 %py_postclean
 %endif
@@ -109,21 +102,15 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc README.txt
-%{py_sitescriptdir}/%{module}.py*
-%{py_sitescriptdir}/%{module}-%{version}-py*.egg-info
+%{py_sitescriptdir}/simplegeneric.py[co]
+%{py_sitescriptdir}/simplegeneric-%{version}-py*.egg-info
 %endif
 
 %if %{with python3}
 %files -n python3-%{module}
 %defattr(644,root,root,755)
 %doc README.txt
-%{py3_sitescriptdir}/%{module}.py
-%{py3_sitescriptdir}/__pycache__/%{module}.*.pyc
-%{py3_sitescriptdir}/%{module}-%{version}-py*.egg-info
-%endif
-
-%if %{with doc}
-%files apidocs
-%defattr(644,root,root,755)
-%doc docs/_build/html/*
+%{py3_sitescriptdir}/simplegeneric.py
+%{py3_sitescriptdir}/__pycache__/simplegeneric.cpython-*.py[co]
+%{py3_sitescriptdir}/simplegeneric-%{version}-py*.egg-info
 %endif

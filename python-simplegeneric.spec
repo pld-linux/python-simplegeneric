@@ -9,7 +9,7 @@ Summary:	Simple generic functions
 Summary(pl.UTF-8):	Proste funkcje generyczne
 Name:		python-%{module}
 Version:	0.8.1
-Release:	7
+Release:	8
 License:	ZPL v2.1
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/simplegeneric/

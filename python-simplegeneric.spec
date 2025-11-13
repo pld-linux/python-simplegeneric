@@ -75,11 +75,19 @@ Pythona.
 
 %build
 %if %{with python2}
-%py_build %{?with_tests:test}
+%py_build
+
+%if %{with tests}
+%{__python} simplegeneric.py
+%endif
 %endif
 
 %if %{with python3}
-%py3_build %{?with_tests:test}
+%py3_build
+
+%if %{with tests}
+%{__python3} simplegeneric.py
+%endif
 %endif
 
 %install
